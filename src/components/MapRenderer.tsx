@@ -14,17 +14,16 @@ export default function MapRenderer({
   onRegionClick,
   isComplete,
 }: MapRendererProps) {
-  // 计算 SVG viewBox
   const viewBox = calculateViewBox(regions);
 
   return (
-    <div className="relative w-full h-full min-h-[400px] bg-gray-50 rounded-lg overflow-hidden">
+    <div className="relative w-full h-full min-h-[400px] md:min-h-[500px] bg-gray-50 rounded-lg overflow-hidden map-container">
       <svg
         viewBox={viewBox}
         className="w-full h-full"
         xmlns="http://www.w3.org/2000/svg"
+        preserveAspectRatio="xMidYMid meet"
       >
-        {/* 渲染所有区域 */}
         {regions.map((region) => {
           const fillColor = region.color || '#e5e5e5';
           const hasConflict = hasColorConflict(region, regions);
@@ -33,7 +32,7 @@ export default function MapRenderer({
             <g
               key={region.id}
               onClick={() => onRegionClick(region.id)}
-              className="cursor-pointer transition-opacity hover:opacity-80"
+              className="cursor-pointer transition-opacity hover:opacity-80 active:opacity-60"
             >
               <path
                 d={region.path}
@@ -44,13 +43,12 @@ export default function MapRenderer({
                   hasConflict ? 'stroke-[2]' : ''
                 }`}
               />
-              {/* 区域名称标签 */}
               <text
                 x={getCentroid(region.path).x}
                 y={getCentroid(region.path).y}
                 textAnchor="middle"
                 dominantBaseline="middle"
-                className="text-[3px] fill-gray-700 pointer-events-none select-none"
+                className="text-[3px] md:text-[4px] fill-gray-700 pointer-events-none select-none"
                 style={{ fontSize: getFontSize(region.path) }}
               >
                 {region.name}
@@ -60,7 +58,6 @@ export default function MapRenderer({
         })}
       </svg>
 
-      {/* 完成状态提示 */}
       {isComplete && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/30">
           <div className="bg-white rounded-lg px-6 py-4 shadow-lg">
@@ -73,9 +70,6 @@ export default function MapRenderer({
   );
 }
 
-/**
- * 检查区域是否有颜色冲突
- */
 function hasColorConflict(region: Region, allRegions: Region[]): boolean {
   if (!region.color) return false;
   for (const neighborId of region.neighbors) {
@@ -87,9 +81,6 @@ function hasColorConflict(region: Region, allRegions: Region[]): boolean {
   return false;
 }
 
-/**
- * 计算 SVG viewBox
- */
 function calculateViewBox(regions: Region[]): string {
   let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
   
@@ -107,9 +98,6 @@ function calculateViewBox(regions: Region[]): string {
   return `${minX - padding} ${minY - padding} ${maxX - minX + padding * 2} ${maxY - minY + padding * 2}`;
 }
 
-/**
- * 解析 SVG path 坐标
- */
 function parsePathCoords(path: string): [number, number][] {
   const coords: [number, number][] = [];
   const matches = path.matchAll(/M\s+(\d+)\s+(\d+)|L\s+(\d+)\s+(\d+)/g);
@@ -123,9 +111,6 @@ function parsePathCoords(path: string): [number, number][] {
   return coords;
 }
 
-/**
- * 获取路径中心点
- */
 function getCentroid(path: string): { x: number; y: number } {
   const coords = parsePathCoords(path);
   if (coords.length === 0) return { x: 0, y: 0 };
@@ -138,9 +123,6 @@ function getCentroid(path: string): { x: number; y: number } {
   };
 }
 
-/**
- * 根据区域大小计算字体大小
- */
 function getFontSize(path: string): string {
   const coords = parsePathCoords(path);
   if (coords.length < 2) return '3px';
