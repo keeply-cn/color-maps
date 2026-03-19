@@ -4,7 +4,7 @@ export interface Region {
   name: string;
   path: string; // SVG path
   neighbors: string[]; // 相邻区域 ID 列表
-  color: string | null; // 当前颜色
+  color?: string | null; // 当前颜色（可选）
 }
 
 // 游戏状态类型

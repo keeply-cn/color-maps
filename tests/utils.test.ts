@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { isSameColor, canColorRegion, hasColorConflict, formatTime } from '@/lib/utils';
+import { isSameColor, canColorRegion, hasColorConflict, formatTime } from '@/utils/helpers';
 
 describe('Utils', () => {
   describe('isSameColor', () => {
