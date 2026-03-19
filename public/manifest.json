@@ -1,12 +1,15 @@
 {
-  "name": "Color Maps - 四色定理游戏",
+  "name": "Color Maps - 四色定理涂色游戏",
   "short_name": "ColorMaps",
-  "description": "基于四色定理的地图涂色游戏",
+  "description": "适合7-12岁儿童的地图涂色游戏，学习地理知识，培养逻辑思维",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "background_color": "#f0f9ff",
   "theme_color": "#3b82f6",
-  "orientation": "portrait-primary",
+  "orientation": "any",
+  "categories": ["education", "games", "kids"],
+  "lang": "zh-CN",
+  "dir": "ltr",
   "icons": [
     {
       "src": "/icon-192.png",
@@ -19,6 +22,30 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "练习地图",
+      "short_name": "练习",
+      "description": "9个区域的简单地图",
+      "url": "/game/simple",
+      "icons": []
+    },
+    {
+      "name": "世界地图",
+      "short_name": "世界",
+      "description": "认识世界主要国家",
+      "url": "/game/world",
+      "icons": []
+    },
+    {
+      "name": "中国地图",
+      "short_name": "中国",
+      "description": "34个省级行政区",
+      "url": "/game/china",
+      "icons": []
     }
   ]
 }

@@ -1,0 +1,20 @@
+# 图标占位符
+
+请将以下图标文件放置在 public 目录：
+
+1. icon-192.png (192x192 像素)
+2. icon-512.png (512x512 像素)
+3. favicon.ico
+
+建议图标设计：
+- 主题：地图 + 彩色画笔
+- 颜色：蓝色主题（#3b82f6）
+- 风格：简洁、儿童友好
+
+可以使用以下工具生成图标：
+- https://realfavicongenerator.net/
+- https://www.favicon-generator.org/
+- Figma / Canva
+
+或者使用 emoji 作为临时图标：
+🎨 (调色板) 或 🗺️ (地图)

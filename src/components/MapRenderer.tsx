@@ -16,8 +16,14 @@ export default function MapRenderer({
 }: MapRendererProps) {
   const viewBox = calculateViewBox(regions);
 
+  // 处理触摸事件
+  const handleTouch = (e: React.TouchEvent, regionId: string) => {
+    e.preventDefault();
+    onRegionClick(regionId);
+  };
+
   return (
-    <div className="relative w-full h-full min-h-[400px] md:min-h-[500px] bg-gray-50 rounded-lg overflow-hidden map-container">
+    <div className="relative w-full h-full min-h-[300px] md:min-h-[500px] bg-gray-50 rounded-lg overflow-hidden map-container touch-none">
       <svg
         viewBox={viewBox}
         className="w-full h-full"
@@ -32,7 +38,9 @@ export default function MapRenderer({
             <g
               key={region.id}
               onClick={() => onRegionClick(region.id)}
+              onTouchEnd={(e) => handleTouch(e, region.id)}
               className="cursor-pointer transition-opacity hover:opacity-80 active:opacity-60"
+              style={{ touchAction: 'none' }}
             >
               <path
                 d={region.path}
@@ -59,8 +67,8 @@ export default function MapRenderer({
       </svg>
 
       {isComplete && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-          <div className="bg-white rounded-lg px-6 py-4 shadow-lg">
+        <div className="absolute inset-0 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+          <div className="bg-white rounded-lg px-6 py-4 shadow-lg animate-bounce-in">
             <p className="text-xl font-bold text-green-600">🎉 挑战成功！</p>
             <p className="text-sm text-gray-600 mt-1">所有区域已正确涂色</p>
           </div>

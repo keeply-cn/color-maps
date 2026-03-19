@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
+import Link from 'next/link';
 import MapRenderer from '@/components/MapRenderer';
 import ColorPicker from '@/components/ColorPicker';
 import GameInfo from '@/components/GameInfo';
@@ -38,6 +39,9 @@ export default function GamePage() {
   const [elapsedTime, setElapsedTime] = useState(0);
   const [showVictory, setShowVictory] = useState(false);
   const [audioEnabled, setAudioEnabled] = useState(true);
+
+  const maps = getAvailableMaps();
+  const currentMap = maps.find(m => m.id === mapId);
 
   // 计时器
   useEffect(() => {
@@ -123,62 +127,74 @@ export default function GamePage() {
     audioService.playClick();
   };
 
-  const maps = getAvailableMaps();
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4 md:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-2 md:p-4 lg:p-8">
       <div className="max-w-6xl mx-auto">
-        <header className="mb-6 text-center">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">
-            🎨 Color Maps
-          </h1>
-          <p className="text-gray-600">四色定理地图涂色游戏</p>
-        </header>
+        {/* 顶部导航栏 */}
+        <header className="mb-4 md:mb-6">
+          <div className="flex items-center justify-between mb-2">
+            <Link
+              href="/"
+              className="flex items-center gap-2 px-3 py-2 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow text-gray-700 hover:text-blue-600"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              <span className="text-sm font-medium hidden sm:inline">返回首页</span>
+            </Link>
+            
+            <div className="text-center flex-1 mx-4">
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
+                {currentMap?.name || '地图涂色'}
+              </h1>
+              <p className="text-xs md:text-sm text-gray-600 hidden sm:block">
+                {currentMap?.description}
+              </p>
+            </div>
 
-        {/* 顶部工具栏 */}
-        <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
-          {/* 地图选择 */}
-          <div className="flex flex-wrap justify-center gap-2">
-            {maps.map(map => (
-              <a
-                key={map.id}
-                href={`/game/${map.id}`}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  mapId === map.id
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-white text-gray-700 hover:bg-gray-100'
-                }`}
-              >
-                {map.name}
-              </a>
-            ))}
-          </div>
-
-          {/* 音效开关 */}
-          <button
-            onClick={toggleAudio}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-              audioEnabled
-                ? 'bg-green-100 text-green-700'
-                : 'bg-gray-100 text-gray-500'
-            }`}
-          >
-            {audioEnabled ? (
-              <>
+            {/* 音效开关 */}
+            <button
+              onClick={toggleAudio}
+              className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
+                audioEnabled
+                  ? 'bg-green-100 text-green-700'
+                  : 'bg-gray-100 text-gray-500'
+              }`}
+              title={audioEnabled ? '关闭音效' : '开启音效'}
+            >
+              {audioEnabled ? (
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.984 5.984 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.983 3.983 0 00-1.172-2.828 1 1 0 010-1.414z" clipRule="evenodd" />
                 </svg>
-                <span className="text-sm font-medium">音效开</span>
-              </>
-            ) : (
-              <>
+              ) : (
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM12.293 7.293a1 1 0 011.414 0L15 8.586l1.293-1.293a1 1 0 111.414 1.414L16.414 10l1.293 1.293a1 1 0 01-1.414 1.414L15 11.414l-1.293 1.293a1 1 0 01-1.414-1.414L13.586 10l-1.293-1.293a1 1 0 010-1.414z" clipRule="evenodd" />
                 </svg>
-                <span className="text-sm font-medium">音效关</span>
-              </>
-            )}
-          </button>
+              )}
+              <span className="text-sm font-medium hidden md:inline">
+                {audioEnabled ? '音效' : '静音'}
+              </span>
+            </button>
+          </div>
+        </header>
+
+        {/* 地图切换（移动端优化） */}
+        <div className="mb-3 md:mb-4">
+          <div className="flex flex-wrap justify-center gap-2">
+            {maps.map(map => (
+              <Link
+                key={map.id}
+                href={`/game/${map.id}`}
+                className={`px-3 py-1.5 md:px-4 md:py-2 rounded-lg text-xs md:text-sm font-medium transition-colors ${
+                  mapId === map.id
+                    ? 'bg-blue-600 text-white shadow-md'
+                    : 'bg-white text-gray-700 hover:bg-gray-100 shadow-sm'
+                }`}
+              >
+                {map.name}
+              </Link>
+            ))}
+          </div>
         </div>
 
         {/* 游戏信息面板 */}

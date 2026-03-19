@@ -1,4 +1,15 @@
 import type { Region } from '@/types';
+import { WORLD_MAP } from './world-map';
+
+export interface MapInfo {
+  id: string;
+  name: string;
+  description: string;
+  regionCount: number;
+  difficulty: 'easy' | 'medium' | 'hard';
+  category: 'world' | 'china' | 'province';
+  parentId?: string;
+}
 
 /**
  * 中国省级行政区地图数据
@@ -71,6 +82,8 @@ export const SIMPLE_MAP: Region[] = [
  */
 export function getMapData(mapId: string): Region[] {
   switch (mapId) {
+    case 'world':
+      return WORLD_MAP;
     case 'china':
       return CHINA_MAP;
     case 'simple':
@@ -82,9 +95,38 @@ export function getMapData(mapId: string): Region[] {
 /**
  * 获取所有可用地图列表
  */
-export function getAvailableMaps(): { id: string; name: string; regionCount: number }[] {
+export function getAvailableMaps(): MapInfo[] {
   return [
-    { id: 'simple', name: '简化地图（9 区域）', regionCount: SIMPLE_MAP.length },
-    { id: 'china', name: '中国地图（34 省级）', regionCount: CHINA_MAP.length },
+    {
+      id: 'simple',
+      name: '练习地图',
+      description: '9个区域，适合初学者',
+      regionCount: SIMPLE_MAP.length,
+      difficulty: 'easy',
+      category: 'world',
+    },
+    {
+      id: 'world',
+      name: '世界地图',
+      description: '主要国家，认识世界',
+      regionCount: WORLD_MAP.length,
+      difficulty: 'medium',
+      category: 'world',
+    },
+    {
+      id: 'china',
+      name: '中国地图',
+      description: '34个省级行政区',
+      regionCount: CHINA_MAP.length,
+      difficulty: 'hard',
+      category: 'china',
+    },
   ];
+}
+
+/**
+ * 根据类别获取地图
+ */
+export function getMapsByCategory(category: 'world' | 'china' | 'province'): MapInfo[] {
+  return getAvailableMaps().filter(map => map.category === category);
 }
